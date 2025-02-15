@@ -306,7 +306,7 @@ require('../function.php');
 
 
 
-    <form action="wanted_regi.php" method="POST" enctype="multipart/form-data" class="max-w-[600px] mx-auto">
+    <form action="wanted_regi.php" id="entryForm" method="POST" enctype="multipart/form-data" class="max-w-[600px] mx-auto">
       <section class="container py-5">
 
         <div class="mb-4">
@@ -419,7 +419,7 @@ require('../function.php');
         </div>
 
         <div class="text-center mb-5">
-          <input class="disabled:opacity-50 bg-gradient-to-r from-violet-400 to-teal-500 mx-auto px-10 py-3 block text-white rounded-full not-disabled:cursor-pointer" id="submit" type="submit" value="送信する" disabled>
+          <input class="disabled:opacity-50 bg-gradient-to-r from-violet-400 to-teal-500 mx-auto px-10 py-3 block text-white rounded-full not-disabled:cursor-pointer" id="submitBtn" type="submit" value="送信する" disabled>
           <input type="hidden" name="csrf_token" value="<?= setToken() ?>">
         </div>
 
@@ -430,15 +430,8 @@ require('../function.php');
           <div class="text-sm">※ その他注釈を記載</div>
         </div>
 
-
-
-
       </section>
-
     </form>
-
-
-
   </section>
 
 
@@ -467,9 +460,20 @@ require('../function.php');
 </html>
 
 <script>
-  submit = document.querySelector("#submit");
-  check = document.querySelector("#privacy_check");
-  check.addEventListener("change", function() {
-    submit.disabled = !check.checked;
+  document.addEventListener("DOMContentLoaded", function() {
+    let submitBtn = document.querySelector("#submitBtn");
+    let check = document.querySelector("#privacy_check");
+    let form = document.querySelector("#entryForm");
+
+    check.addEventListener("change", function() {
+      submitBtn.disabled = !check.checked;
+    });
+
+    submitBtn.addEventListener("click", function(e) {
+      e.preventDefault(); // デフォルト送信止める
+      submitBtn.value = "送信中...";
+      submitBtn.disabled = true;
+      form.submit();
+    });
   });
 </script>
